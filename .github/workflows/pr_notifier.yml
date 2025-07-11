@@ -9,11 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Enviar notificação para o Discord
-        uses: tsickert/discord-webhook@v2
+        uses: tsickert/discord-webhook@v5
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          content: "Ei, @everyone! Temos um novo Pull Request para revisar!"
-
+          content: "Ei, @everyone! Temos um novo Pull Request para revisar! 🚀"
           embed: |
             {
               "title": "${{ github.event.pull_request.title }}",
