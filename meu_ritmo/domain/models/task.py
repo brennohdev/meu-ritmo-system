@@ -16,7 +16,13 @@ class Tarefa:
         categoria (str): Categoria da tarefa (ex: trabalho, pessoal).
     """
 
-    def __init__(self, descricao: str, prioridade: int, impacto_energia: int, categoria: CategoriaEnum):
+    def __init__(
+        self,
+        descricao: str,
+        prioridade: int,
+        impacto_energia: int,
+        categoria: CategoriaEnum,
+    ):
         if not descricao:
             raise ValueError("A descrição da tarefa não pode estar vazia.")
 

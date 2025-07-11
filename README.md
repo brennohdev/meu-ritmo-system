@@ -40,7 +40,7 @@ Siga os passos abaixo para configurar e rodar o projeto em sua máquina local.
 
 1. Clone o repositório:
    ```bash
-   git clone [https://github.com/](https://github.com/)[SEU_USUARIO_GITHUB]/meu_ritmo_projeto.git
+   git clone git@github.com:brennohdev/meu-ritmo-system.git
    ```
 
 2. Navegue até a pasta do projeto:
