@@ -1,0 +1,44 @@
+# Nome do nosso workflow. Aparecerá na aba "Actions" do GitHub.
+name: Verificador de Qualidade do Código
+
+# Define o gatilho: quando esta Action deve rodar.
+on:
+  # Roda toda vez que um Pull Request for aberto ou atualizado para a branch 'main'.
+  pull_request:
+    branches: [ "main" ]
+  # Também permite rodar manualmente pela interface do GitHub.
+  workflow_dispatch:
+
+# Define os "trabalhos" (jobs) que a Action vai executar.
+jobs:
+  # Nomeamos nosso único job como "build".
+  build:
+    # O tipo de máquina virtual que vai rodar o código. 'ubuntu-latest' é rápido e padrão.
+    runs-on: ubuntu-latest
+
+    # A sequência de passos que o nosso robô vai seguir.
+    steps:
+      # Passo 1: Clona seu repositório para dentro da máquina virtual.
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      # Passo 2: Configura o ambiente Python.
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      # Passo 3: Instala as dependências necessárias para a verificação.
+      - name: Instalar dependências
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff
+
+      # Passo 4: Roda o verificador de formatação.
+      # O '--check' não formata o código, ele apenas falha se o código NÃO ESTIVER formatado.
+      - name: Verificar formatação com Ruff
+        run: ruff format --check .
+
+      # Passo 5: Roda o linter para encontrar erros e problemas de estilo.
+      - name: Verificar código com Linter do Ruff
+        run: ruff check .
