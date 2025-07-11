@@ -1,0 +1,25 @@
+# Arquivos de Cache e Bytecode do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Pastas de Ambiente Virtual
+venv/
+env/
+.env
+.venv
+
+# Arquivos de configuração de IDEs e editores
+.idea/
+.vscode/
+*.swp
+
+# Arquivos de sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de teste e cobertura
+.pytest_cache/
+.coverage
+htmlcov/
