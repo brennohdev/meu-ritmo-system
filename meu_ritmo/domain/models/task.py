@@ -3,6 +3,7 @@ import datetime
 from meu_ritmo.domain.enums.category_enum import CategoriaEnum
 from meu_ritmo.domain.enums.priority_enum import PrioridadeEnum
 
+
 class Tarefa:
     """
     Representa uma única tarefa na agenda.
