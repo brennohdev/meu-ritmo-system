@@ -1,0 +1,11 @@
+# Exemplo de um requirements.txt para um projeto Python
+# Este arquivo lista as dependências do projeto e suas versões
+
+# matplotlib==3.8.2
+# numpy==1.26.4
+
+# Para criar um requirements.txt, você pode usar o seguinte comando:
+# pip freeze > requirements.txt
+
+# Para instalar as dependências listadas neste arquivo, use:
+# pip install -r requirements.txt
