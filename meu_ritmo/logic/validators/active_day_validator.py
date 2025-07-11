@@ -5,6 +5,8 @@ from meu_ritmo.domain.models.task import Tarefa
 
 class DiaAtivo_Validator:
 
+    # Classe contendo metodos para validar parametros de classe
+
     def validar_data(data: date) -> tuple[bool, str]:
 
         if not isinstance(data, date):
