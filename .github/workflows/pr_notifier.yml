@@ -1,0 +1,40 @@
+name: Notificador de Pull Requests no Discord
+
+# Gatilho: Roda apenas quando um PR é aberto.
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      # Usamos uma Action pronta da comunidade para enviar a mensagem.
+      - name: Enviar notificação para o Discord
+        uses: tsickert/discord-webhook@v2
+        with:
+          # Busca a nossa URL secreta que configuramos no repositório.
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+          # Conteúdo da mensagem. Pode usar @here ou @everyone se quiser.
+          content: " Ei, @everyone! Temos um novo Pull Request para revisar!"
+
+          # 'embed' cria aquela caixa de mensagem bonita e organizada no Discord.
+          embed:
+            # O título do embed será o título do PR.
+            title: "${{ github.event.pull_request.title }}"
+            # A URL do título levará direto para a página do PR.
+            url: "${{ github.event.pull_request.html_url }}"
+
+            # Uma cor para a barra lateral do embed.
+            color: "65280" # Um azul bonitinho
+
+            # O autor do embed será a pessoa que abriu o PR.
+            author:
+              name: "${{ github.actor }}"
+              url: "${{ github.server_url }}/${{ github.actor }}"
+              icon_url: "${{ github.server_url }}/${{ github.actor }}.png?size=32"
+
+            # O rodapé da mensagem.
+            footer:
+              text: "Projeto 'Meu Ritmo' | Notificação Automática"
