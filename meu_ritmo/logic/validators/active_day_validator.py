@@ -4,7 +4,6 @@ from meu_ritmo.domain.models.task import Tarefa
 
 
 class DiaAtivo_Validator:
-
     def validar_data(data: date) -> tuple[bool, str]:
         if not isinstance(data, date):
             return (False, "Data tem que ser do tipo válido")

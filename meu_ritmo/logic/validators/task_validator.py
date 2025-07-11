@@ -4,8 +4,8 @@ from meu_ritmo.domain.enums.category_enum import CategoriaEnum
 
 from meu_ritmo.domain.enums.priority_enum import PrioridadeEnum
 
-class Validacao_Tarefas:
 
+class Validacao_Tarefas:
     # Classe contendo metodos para validar parametros de classe
 
     def validar_descricao(descricao: str) -> tuple[bool, str]:
@@ -18,7 +18,6 @@ class Validacao_Tarefas:
         return (True, "")
 
     def validar_prioridade(prioridade: PrioridadeEnum) -> tuple[bool, str]:
-
         if not isinstance(prioridade, PrioridadeEnum):
             return (False, "Prioridade deve ser (Alta/Média/Baixa)")
 
@@ -33,7 +32,7 @@ class Validacao_Tarefas:
     def validar_categoria(categoria: CategoriaEnum) -> tuple[bool, str]:
         if not isinstance(categoria, CategoriaEnum):
             return (False, f"Categoria inválida apenas valores {list(CategoriaEnum)}")
-        
+
         return (True, "")
 
     def validar_data_de_criacao(data_de_criacao: date) -> tuple[bool, str]:
