@@ -1,0 +1,31 @@
+name: Notificador de Pull Requests no Discord
+
+on:
+  pull_request:
+    types: [ opened ]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enviar notificação para o Discord
+        uses: tsickert/discord-webhook@v5.5.0
+        with:
+          # Correção 1: Usando o nome correto 'webhook-url' com hífen.
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+          # O conteúdo da mensagem continua o mesmo.
+          content: "Ei, @everyone! Temos um novo Pull Request para revisar! 🚀"
+
+          # Correção 2: Desmembramos o 'embed' em parâmetros individuais.
+          embed-title: "${{ github.event.pull_request.title }}"
+          embed-url: "${{ github.event.pull_request.html_url }}"
+          embed-color: "65280"
+
+          # Para o autor, usamos os parâmetros específicos de autor.
+          embed-author-name: "${{ github.actor }}"
+          embed-author-url: "${{ github.server_url }}/${{ github.actor }}"
+          embed-author-icon-url: "${{ github.server_url }}/${{ github.actor }}.png?size=32"
+
+          # Para o rodapé, usamos os parâmetros específicos de rodapé.
+          embed-footer-text: "Projeto 'Meu Ritmo' | Notificação Automática"
