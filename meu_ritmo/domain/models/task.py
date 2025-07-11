@@ -1,7 +1,7 @@
 import datetime
 
 from meu_ritmo.domain.enums.category_enum import CategoriaEnum
-
+from meu_ritmo.domain.enums.priority_enum import PrioridadeEnum
 
 class Tarefa:
     """
@@ -19,7 +19,7 @@ class Tarefa:
     def __init__(
         self,
         descricao: str,
-        prioridade: int,
+        prioridade: PrioridadeEnum,
         impacto_energia: int,
         categoria: CategoriaEnum,
     ):
