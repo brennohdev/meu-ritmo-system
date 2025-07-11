@@ -1,24 +1,19 @@
-# Nome do nosso workflow. Aparecerá na aba "Actions" do GitHub.
-name: Verificador de Qualidade do Código
+# Nome do nosso workflow.
+name: Verificador e Corretor de Qualidade
 
-# Define o gatilho: quando esta Action deve rodar.
+# Define o gatilho.
 on:
-  # Roda toda vez que um Pull Request for aberto ou atualizado para a branch 'main'.
   pull_request:
     branches: [ "main" ]
-  # Também permite rodar manualmente pela interface do GitHub.
   workflow_dispatch:
 
-# Define os "trabalhos" (jobs) que a Action vai executar.
+# Define os trabalhos (jobs).
 jobs:
-  # Nomeamos nosso único job como "build".
-  build:
-    # O tipo de máquina virtual que vai rodar o código. 'ubuntu-latest' é rápido e padrão.
+  format-and-lint:
     runs-on: ubuntu-latest
 
-    # A sequência de passos que o nosso robô vai seguir.
     steps:
-      # Passo 1: Clona seu repositório para dentro da máquina virtual.
+      # Passo 1: Clona seu repositório.
       - name: Checkout do código
         uses: actions/checkout@v4
 
@@ -28,17 +23,25 @@ jobs:
         with:
           python-version: '3.13'
 
-      # Passo 3: Instala as dependências necessárias para a verificação.
-      - name: Instalar dependências
-        run: |
-          python -m pip install --upgrade pip
-          pip install ruff
+      # Passo 3: Instala as dependências.
+      - name: Instalar Ruff
+        run: pip install ruff
 
-      # Passo 4: Roda o verificador de formatação.
-      # O '--check' não formata o código, ele apenas falha se o código NÃO ESTIVER formatado.
-      - name: Verificar formatação com Ruff
-        run: ruff format --check .
-
-      # Passo 5: Roda o linter para encontrar erros e problemas de estilo.
+      # Passo 4: Roda o linter (isso continua sendo uma verificação importante).
       - name: Verificar código com Linter do Ruff
         run: ruff check .
+
+      # Passo 5: Formata o código automaticamente.
+      # Removemos o '--check' para que ele realmente formate os arquivos.
+      - name: Formatar código com Ruff
+        run: ruff format .
+
+      # Passo 6:
+      # Usa uma Action da comunidade para fazer um commit com as alterações da formatação.
+      - name: Fazer commit das alterações de formatação
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          # Mensagem do commit que o robô fará.
+          commit_message: "style: Formata código automaticamente com Ruff ✨"
+          commit_user_name: "GitHub Actions Bot"
+          commit_user_email: "actions@github.com"
