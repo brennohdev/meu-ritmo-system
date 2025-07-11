@@ -16,7 +16,7 @@ permitindo ao usuário visualizar e gerenciar sua disposição ao longo do dia, 
 
 O projeto está sendo desenvolvido em etapas. Abaixo estão as funcionalidades implementadas e em andamento.
 
-### Etapa 1 (Em andamento)
+### Etapa 1 (Em andament)
 
 * Criação de Tarefas: Adição de tarefas com descrição e prioridade.
 * Sistema de Bateria de Energia: O dia começa com 100 pontos de energia que são consumidos ou recuperados com base nas
