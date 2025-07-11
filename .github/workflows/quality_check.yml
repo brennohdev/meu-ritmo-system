@@ -7,9 +7,12 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
-# Define os trabalhos (jobs).
+# Define os "trabalhos" (jobs) que a Action vai executar.
 jobs:
   format-and-lint:
+    permissions:
+      # Dá permissão para a Action escrever no conteúdo do repositório (fazer commits).
+      contents: write
     runs-on: ubuntu-latest
 
     steps:
