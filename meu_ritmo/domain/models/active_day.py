@@ -13,6 +13,7 @@ class DiaAtivo:
         tarefas (List[Tarefa]): Uma lista de objetos Tarefa para este dia.
         energia_atual (int): O nível de energia restante para o dia.
     """
+
     ENERGIA_INICIAL: int = 100
 
     def __init__(self, data: datetime.date):
@@ -25,10 +26,14 @@ class DiaAtivo:
         self.energia_atual += tarefa.impacto_energia
 
         if self.energia_atual < 20 and self.energia_atual > 0:
-            print(f"Ei, Camila! Sua energia está baixa, olha: {self.energia_atual}. Considere uma pausa!")
+            print(
+                f"Ei, Camila! Sua energia está baixa, olha: {self.energia_atual}. Considere uma pausa!"
+            )
         elif self.energia_atual <= 0:
-            print(f"Ei, Camila! Infelizmente sua energia acabou, olha: {self.energia_atual}. "
-                  f"Evite novas tarefas ou isso pode gerar desgaste.")
+            print(
+                f"Ei, Camila! Infelizmente sua energia acabou, olha: {self.energia_atual}. "
+                f"Evite novas tarefas ou isso pode gerar desgaste."
+            )
 
     def mostrar_resumo(self):
         print("\n" + "=" * 40)
@@ -40,6 +45,8 @@ class DiaAtivo:
         if not self.tarefas:
             print(" Nenhuma tarefa. Aproveite para relaxar! :D")
         else:
-            for tarefa in sorted(self.tarefas, key=lambda t: t.prioridade, reverse=True):
+            for tarefa in sorted(
+                self.tarefas, key=lambda t: t.prioridade, reverse=True
+            ):
                 print(f"\nTarefa: {tarefa}")
         print("=" * 40)
