@@ -8,8 +8,9 @@ from meu_ritmo.domain.enums.priority_enum import PrioridadeEnum
 class Validacao_Tarefas:
     # Classe contendo metodos para validar parametros de classe
 
+    @staticmethod
     def validar_descricao(descricao: str) -> tuple[bool, str]:
-        if not isinstance(descricao, str):
+        if(descricao, str):
             return (False, "Descrição deve ser do tipo string")
 
         if not descricao.strip():
@@ -17,37 +18,44 @@ class Validacao_Tarefas:
 
         return (True, "")
 
+    @staticmethod
     def validar_prioridade(prioridade: PrioridadeEnum) -> tuple[bool, str]:
         if not isinstance(prioridade, PrioridadeEnum):
             return (False, "Prioridade deve ser (Alta/Média/Baixa)")
 
         return (True, "")
 
+    @staticmethod
     def validar_impacto_energia(impacto_energia: int) -> tuple[bool, str]:
         if not isinstance(impacto_energia, int):
             return (False, "Impacto de energia deve ser um número inteiro")
 
         return (True, "")
 
+    @staticmethod
     def validar_categoria(categoria: CategoriaEnum) -> tuple[bool, str]:
         if not isinstance(categoria, CategoriaEnum):
             return (False, f"Categoria inválida apenas valores {list(CategoriaEnum)}")
 
         return (True, "")
 
+    @staticmethod
     def validar_data_de_criacao(data_de_criacao: date) -> tuple[bool, str]:
         if not isinstance(data_de_criacao, date):
             return (False, "Data tem que ser do tipo válido")
 
         return (True, "")
 
+    @staticmethod
     def validar_concluido(concluida: bool) -> tuple[bool, str]:
         if not isinstance(concluida, bool):
             return (False, "Concluida tem que ser [True/False]")
 
         return (True, "")
 
+    @classmethod
     def validar_tarefa_completa(
+        cls,
         classe,
         descricao: str,
         prioridade: int,
