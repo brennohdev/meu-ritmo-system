@@ -7,4 +7,3 @@ class PrioridadeEnum(Enum):
     ALTA = "alta"
     MEDIA = "media"
     BAIXA = "baixa"
-
