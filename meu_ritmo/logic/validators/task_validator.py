@@ -10,9 +10,6 @@ class Validacao_Tarefas:
 
     @staticmethod
     def validar_descricao(descricao: str) -> tuple[bool, str]:
-        if(descricao, str):
-            return (False, "Descrição deve ser do tipo string")
-
         if not descricao.strip():
             return (False, "Descrição deve ter no minimo 1 caracter")
 
