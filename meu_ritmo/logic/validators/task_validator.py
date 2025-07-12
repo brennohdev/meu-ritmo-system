@@ -50,9 +50,8 @@ class Validacao_Tarefas:
 
         return (True, "")
 
-    @classmethod
+    @staticmethod
     def validar_tarefa_completa(
-        cls,
         classe,
         descricao: str,
         prioridade: int,
