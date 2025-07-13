@@ -1,4 +1,4 @@
-from typing import Optional, Dict, Any
+from typing import Dict, Any
 from meu_ritmo.domain.enums.category_enum import CategoriaEnum
 from meu_ritmo.domain.enums.priority_enum import PrioridadeEnum
 from meu_ritmo.logic.validators.task_validator import Validacao_Tarefas
@@ -57,7 +57,7 @@ def obter_dados_nova_tarefa() -> Dict[str, Any]:
             if is_valid:
                 break
 
-        print(f"Erro: Categoria inválida. Tente novamente.")
+        print("Erro: Categoria inválida. Tente novamente.")
 
     dados_tarefa = {
         "descricao": descricao,
