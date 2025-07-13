@@ -3,6 +3,7 @@ from meu_ritmo.domain.enums.category_enum import CategoriaEnum
 from meu_ritmo.domain.enums.priority_enum import PrioridadeEnum
 from meu_ritmo.logic.validators.task_validator import Validacao_Tarefas
 
+
 def obter_dados_nova_tarefa() -> Dict[str, Any]:
     """
     Função para obter os dados de uma nova tarefa do usuário e retornar um dicionário com os dados validados.
@@ -17,30 +18,38 @@ def obter_dados_nova_tarefa() -> Dict[str, Any]:
     while True:
         opcoes_prioridade = ", ".join([p.value for p in PrioridadeEnum])
         prioridade_str = input(f"Prioridade ({opcoes_prioridade}): ").lower().strip()
-        
+
         prioridade_selecionada = None
         for p in PrioridadeEnum:
             if p.value == prioridade_str:
                 prioridade_selecionada = p
                 break
-        
+
         if prioridade_selecionada:
-            is_valid, error_msg = Validacao_Tarefas.validar_prioridade(prioridade_selecionada)
+            is_valid, error_msg = Validacao_Tarefas.validar_prioridade(
+                prioridade_selecionada
+            )
             if is_valid:
                 break
-        
+
         print("Erro: Prioridade inválida. Tente novamente.")
 
     while True:
         try:
-            impacto_str = input("Impacto de energia (ex: -10 para custo, 15 para ganho): ").strip()
+            impacto_str = input(
+                "Impacto de energia (ex: -10 para custo, 15 para ganho): "
+            ).strip()
             impacto_energia = int(impacto_str)
-            is_valid, error_msg = Validacao_Tarefas.validar_impacto_energia(impacto_energia)
+            is_valid, error_msg = Validacao_Tarefas.validar_impacto_energia(
+                impacto_energia
+            )
             if is_valid:
                 break
             print(f"Erro: {error_msg}. Tente novamente.")
         except ValueError:
-            print("Erro: O impacto de energia deve ser um número inteiro. Tente novamente.")
+            print(
+                "Erro: O impacto de energia deve ser um número inteiro. Tente novamente."
+            )
 
     while True:
         opcoes_categoria = ", ".join([c.value for c in CategoriaEnum])
@@ -53,7 +62,9 @@ def obter_dados_nova_tarefa() -> Dict[str, Any]:
                 break
 
         if categoria_selecionada:
-            is_valid, error_msg = Validacao_Tarefas.validar_categoria(categoria_selecionada)
+            is_valid, error_msg = Validacao_Tarefas.validar_categoria(
+                categoria_selecionada
+            )
             if is_valid:
                 break
 
@@ -65,5 +76,5 @@ def obter_dados_nova_tarefa() -> Dict[str, Any]:
         "impacto_energia": impacto_energia,
         "categoria": categoria_selecionada,
     }
-    
+
     return dados_tarefa
