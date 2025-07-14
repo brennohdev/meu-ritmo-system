@@ -18,11 +18,11 @@ class Tarefa:
     """
 
     def __init__(
-            self,
-            descricao: str,
-            prioridade: PrioridadeEnum,
-            impacto_energia: int,
-            categoria: CategoriaEnum,
+        self,
+        descricao: str,
+        prioridade: PrioridadeEnum,
+        impacto_energia: int,
+        categoria: CategoriaEnum,
     ):
         if not descricao:
             raise ValueError("A descrição da tarefa não pode estar vazia.")

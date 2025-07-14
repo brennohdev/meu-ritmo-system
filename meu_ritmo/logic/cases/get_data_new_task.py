@@ -10,7 +10,7 @@ MAPA_ENERGIA_CATEGORIAS = {
     CategoriaEnum.FACULDADE: -25,
     CategoriaEnum.AFAZERES_DOMESTICOS: -15,
     CategoriaEnum.ACADEMIA: +15,
-    CategoriaEnum.LAZER: +20
+    CategoriaEnum.LAZER: +20,
 }
 
 

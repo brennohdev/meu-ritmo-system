@@ -53,7 +53,9 @@ class MeuRitmoApp:
         tarefa_concluida = concluir_tarefa_interativo(self.dia_atual.tarefas)
 
         if tarefa_concluida:
-            print(f"\n Parabéns! Tarefa '{tarefa_concluida.descricao}' marcada como concluída.")
+            print(
+                f"\n Parabéns! Tarefa '{tarefa_concluida.descricao}' marcada como concluída."
+            )
             time.sleep(2)
 
     def run(self):
@@ -62,13 +64,13 @@ class MeuRitmoApp:
             self._exibir_menu()
             escolha = input("Escolha uma opção: ")
 
-            if escolha == '1':
+            if escolha == "1":
                 self._processar_adicionar_tarefa()
-            elif escolha == '2':
+            elif escolha == "2":
                 self._processar_ver_resumo()
-            elif escolha == '3':
+            elif escolha == "3":
                 self._processar_concluir_tarefa()
-            elif escolha == '4':
+            elif escolha == "4":
                 self._limpar_tela()
                 print("\nAté a próxima! Cuide-se.")
                 break
