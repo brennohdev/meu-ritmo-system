@@ -36,17 +36,16 @@ class DiaAtivo:
             )
 
     def mostrar_resumo(self):
-        print("\n" + "=" * 40)
+        linha_separadora = "=" * 60
+        print("\n" + linha_separadora)
         print(f"Resumo para o dia: {self.data.strftime('%d de %B de %Y')}")
-        print("=" * 40)
-        print(f"Energia restante: {self.energia_atual} / {self.ENERGIA_INICIAL}")
+        print("-" * 60)
+        print(f"⚡ Energia restante: {self.energia_atual} / {self.ENERGIA_INICIAL}")
         print("\n Tarefas do Dia:")
 
         if not self.tarefas:
-            print(" Nenhuma tarefa. Aproveite para relaxar! :D")
+            print("   Nenhuma tarefa. Aproveite para relaxar! :D")
         else:
-            for tarefa in sorted(
-                self.tarefas, key=lambda t: t.prioridade, reverse=True
-            ):
-                print(f"\nTarefa: {tarefa}")
-        print("=" * 40)
+            for tarefa in sorted(self.tarefas, key=lambda t: t.prioridade.value):
+                print(f"   - {tarefa}")
+        print(linha_separadora)

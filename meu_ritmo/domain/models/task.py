@@ -18,11 +18,11 @@ class Tarefa:
     """
 
     def __init__(
-        self,
-        descricao: str,
-        prioridade: PrioridadeEnum,
-        impacto_energia: int,
-        categoria: CategoriaEnum,
+            self,
+            descricao: str,
+            prioridade: PrioridadeEnum,
+            impacto_energia: int,
+            categoria: CategoriaEnum,
     ):
         if not descricao:
             raise ValueError("A descrição da tarefa não pode estar vazia.")
@@ -35,9 +35,10 @@ class Tarefa:
         self.categoria = categoria
 
     def __repr__(self) -> str:
-        status_icone = "v" if self.concluida else "o"
-        sinal_energia = "+" if self.impacto_energia > 0 else ""
-        return f"[{status_icone}] {self.descricao} | Prioridade: {self.prioridade} | Energia: {sinal_energia}{self.impacto_energia}"
+        status_icone = "✓" if self.concluida else "○"
+        sinal_energia = "+" if self.impacto_energia >= 0 else ""
+        prioridade_str = self.prioridade.name.capitalize()
+        return f"[{status_icone}] {self.descricao} | Categoria: {self.categoria.value} | Prioridade: {prioridade_str} | Energia: {sinal_energia}{self.impacto_energia}"
 
     def marcar_como_concluida(self):
         self.concluida = True
