@@ -2,7 +2,6 @@ import datetime
 import time
 
 from meu_ritmo.domain.models.active_day import DiaAtivo
-from meu_ritmo.domain.models.task import Tarefa
 from meu_ritmo.logic.cases.get_data_new_task import obter_dados_nova_tarefa
 from meu_ritmo.logic.cases.task_updater import concluir_tarefa_interativo
 
