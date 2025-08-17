@@ -28,17 +28,17 @@ class MeuRitmoApp:
         print("3. Concluir uma tarefa")
         print("4. Sair do programa")
         print("=" * 37)
-
+ 
     def _processar_adicionar_tarefa(self):
         self._limpar_tela()
-
+        print("Adicionar Nova Tarefa")
+        print("Tipos disponíveis: normal, recorrente, urgente\n")
+        
         dados_da_tarefa = obter_dados_nova_tarefa()
 
         if dados_da_tarefa:
-            nova_tarefa = Tarefa(**dados_da_tarefa)
-
-            self.dia_atual.adicionar_tarefa(nova_tarefa)
-            print("\n Tarefa adicionada com sucesso!")
+            self.dia_atual.adicionar_tarefa(dados_da_tarefa)
+            print("\nTarefa adicionada com sucesso!")
             time.sleep(2)
 
     def _processar_ver_resumo(self):
