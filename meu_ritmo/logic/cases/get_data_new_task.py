@@ -66,7 +66,7 @@ def obter_dados_nova_tarefa() -> Dict[str, Any]:
     impacto_energia = MAPA_ENERGIA_CATEGORIAS[categoria_selecionada]
 
     tipo_especial = input("\nTipo especial (normal/recorrente/urgente): ").lower()
-    while tipo_especial not in ['normal', 'recorrente', 'urgente']:
+    while tipo_especial not in ["normal", "recorrente", "urgente"]:
         print("Opção inválida! Escolha entre normal, recorrente ou urgente")
         tipo_especial = input("Tipo especial (normal/recorrente/urgente): ").lower()
 

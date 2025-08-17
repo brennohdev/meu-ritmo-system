@@ -4,6 +4,7 @@ from meu_ritmo.domain.models.types_special_task import TarefaRecorrente, TarefaU
 from meu_ritmo.domain.models.task import Tarefa
 from meu_ritmo.domain.models.special_task import TarefaEspecial
 
+
 class DiaAtivo:
     """
     Gerencia todas as tarefas e o nível de energia para um único dia.
@@ -23,30 +24,30 @@ class DiaAtivo:
 
     def adicionar_tarefa(self, dados_tarefa):
         # Cria o tipo de tarefa apropriado
-         if dados_tarefa['tipo_especial'] == 'recorrente':
-                tarefa = TarefaRecorrente(
-                descricao=dados_tarefa['descricao'],
-                prioridade=dados_tarefa['prioridade'],
-                categoria=dados_tarefa['categoria'],
-                impacto_energia=dados_tarefa['impacto_energia']
+        if dados_tarefa["tipo_especial"] == "recorrente":
+            tarefa = TarefaRecorrente(
+                descricao=dados_tarefa["descricao"],
+                prioridade=dados_tarefa["prioridade"],
+                categoria=dados_tarefa["categoria"],
+                impacto_energia=dados_tarefa["impacto_energia"],
             )
-         elif dados_tarefa['tipo_especial'] == 'urgente':
-                tarefa = TarefaUrgente(
-                descricao=dados_tarefa['descricao'],
-                prioridade=dados_tarefa['prioridade'],
-                categoria=dados_tarefa['categoria'],
-                impacto_energia=dados_tarefa['impacto_energia']
+        elif dados_tarefa["tipo_especial"] == "urgente":
+            tarefa = TarefaUrgente(
+                descricao=dados_tarefa["descricao"],
+                prioridade=dados_tarefa["prioridade"],
+                categoria=dados_tarefa["categoria"],
+                impacto_energia=dados_tarefa["impacto_energia"],
             )
-         else:
-                tarefa = Tarefa(
-                descricao=dados_tarefa['descricao'],
-                prioridade=dados_tarefa['prioridade'],
-                categoria=dados_tarefa['categoria'],
-                impacto_energia=dados_tarefa['impacto_energia']
+        else:
+            tarefa = Tarefa(
+                descricao=dados_tarefa["descricao"],
+                prioridade=dados_tarefa["prioridade"],
+                categoria=dados_tarefa["categoria"],
+                impacto_energia=dados_tarefa["impacto_energia"],
             )
-    
-         self.tarefas.append(tarefa)
-         self.energia_atual += tarefa.impacto_energia
+
+        self.tarefas.append(tarefa)
+        self.energia_atual += tarefa.impacto_energia
 
     def mostrar_resumo(self):
         linha_separadora = "=" * 60
@@ -60,10 +61,10 @@ class DiaAtivo:
             print("   Nenhuma tarefa. Aproveite para relaxar! :D")
         else:
             for tarefa in sorted(self.tarefas, key=lambda t: t.prioridade.value):
-            # Determina o tipo da tarefa de forma mais robusta
+                # Determina o tipo da tarefa de forma mais robusta
                 tipo = "Normal"  # Padrão
-            
-            # Verifica o tipo real da instância
+
+                # Verifica o tipo real da instância
                 if isinstance(tarefa, TarefaEspecial):
                     if isinstance(tarefa, TarefaRecorrente):
                         tipo = "🔁 Recorrente"
@@ -71,13 +72,15 @@ class DiaAtivo:
                         tipo = "⏰ Urgente"
                     else:
                         tipo = "✨ Especial"
-                
+
                 sinal_energia = "+" if tarefa.impacto_energia >= 0 else ""
                 status_icone = "✓" if tarefa.concluida else "○"
-                
-                print(f"   - [{status_icone}] {tarefa.descricao.ljust(20)} | "
+
+                print(
+                    f"   - [{status_icone}] {tarefa.descricao.ljust(20)} | "
                     f"Categoria: {tarefa.categoria.value.ljust(15)} | "
                     f"Prioridade: {tarefa.prioridade.name.capitalize().ljust(6)} | "
                     f"Energia: {sinal_energia}{str(tarefa.impacto_energia).ljust(3)} | "
-                    f"Tipo: {tipo}")
+                    f"Tipo: {tipo}"
+                )
         print(linha_separadora)
