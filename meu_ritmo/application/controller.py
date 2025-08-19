@@ -16,7 +16,7 @@ class MeuRitmoApp:
         self.dia_atual = DiaAtivo(datetime.date.today())
         self._limpar_tela()
         print("Olá, Camila! Bem-vinda ao seu assistente de rotina, Meu Ritmo.")
-        time.sleep(4)
+        time.sleep(2)
 
     def _limpar_tela(self):
         print("\n" * 100)
@@ -28,7 +28,7 @@ class MeuRitmoApp:
         print("3. Concluir uma tarefa")
         print("4. Deletar uma tarefa")
         print("5. Sair do programa")
-        print("=" * 37)
+        print("=" * 35)
 
 
     def _processar_deletar_tarefa(self):
@@ -39,8 +39,7 @@ class MeuRitmoApp:
         
     def _processar_adicionar_tarefa(self):
         self._limpar_tela()
-        print("Adicionar Nova Tarefa")
-        print("Tipos disponíveis: normal, recorrente, urgente\n")
+        print("Adicionar Nova Tarefa\n")
 
         dados_da_tarefa = obter_dados_nova_tarefa()
 

@@ -28,7 +28,3 @@ class TarefaUrgente(TarefaEspecial):
 
     def aplicar_efeito_especial(self) -> str:
         return "⏰ Tarefa urgente concluída! +15 de energia extra!"
-
-    def marcar_como_concluida(self):
-        energia = super().marcar_como_concluida()
-        return energia + 15  # Bônus por urgência
