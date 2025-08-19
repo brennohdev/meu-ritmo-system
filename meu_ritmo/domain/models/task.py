@@ -6,6 +6,7 @@ from meu_ritmo.domain.enums.priority_enum import PrioridadeEnum
 
 class Tarefa:
     """Representa uma única tarefa na agenda."""
+
     def __init__(
         self,
         descricao: str,

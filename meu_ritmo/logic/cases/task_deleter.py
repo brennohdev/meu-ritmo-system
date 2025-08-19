@@ -2,6 +2,7 @@ import time
 from typing import List
 from meu_ritmo.domain.models.task import Tarefa
 
+
 def deletar_tarefa_interativa(tarefas_do_dia: List[Tarefa]) -> None:
     """
     Exibe todas as tarefas e permite ao usuário escolher uma para deletar.
@@ -11,11 +12,11 @@ def deletar_tarefa_interativa(tarefas_do_dia: List[Tarefa]) -> None:
         print("\nNão há tarefas para deletar.")
         time.sleep(2)
         return
-    
+
     print("\nQual tarefa você deseja deletar?")
     for i, tarefa in enumerate(tarefas_do_dia):
-        print(f" {i+1}. {tarefa.descricao}")
-        
+        print(f" {i + 1}. {tarefa.descricao}")
+
     while True:
         try:
             escolha_str = input("\nDigite o número da tarefa (ou 'c' para cancelar): ")

@@ -30,13 +30,12 @@ class MeuRitmoApp:
         print("5. Sair do programa")
         print("=" * 35)
 
-
     def _processar_deletar_tarefa(self):
         """Orquestra o processo de deletar uma tarefa."""
         self._limpar_tela()
         print(" Deletar Tarefa ")
         deletar_tarefa_interativa(self.dia_atual.tarefas)
-        
+
     def _processar_adicionar_tarefa(self):
         self._limpar_tela()
         print("Adicionar Nova Tarefa\n")
@@ -79,7 +78,7 @@ class MeuRitmoApp:
                 self._processar_concluir_tarefa()
             elif escolha == "4":
                 self._processar_deletar_tarefa()
-            elif escolha == "5": 
+            elif escolha == "5":
                 self._limpar_tela()
                 print("\nAté a próxima! Cuide-se.")
                 break
