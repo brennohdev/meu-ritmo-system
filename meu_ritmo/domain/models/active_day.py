@@ -21,6 +21,18 @@ class DiaAtivo:
         self.data = data
         self.tarefas: List[Tarefa] = []
         self.energia_atual = self.ENERGIA_INICIAL
+    
+    @property
+    def nivel_de_cansaco(self) -> str:
+        """Calcula o status da Camila com base na energia atual."""
+        if self.energia_atual > 70:
+            return "Disposta "
+        elif 40 < self.energia_atual <= 70:
+            return "Normal "
+        elif 20 < self.energia_atual <= 40:
+            return "Cansada "
+        else:
+            return "Exausta "
 
     def adicionar_tarefa(self, dados_tarefa):
         # Cria o tipo de tarefa apropriado
@@ -54,7 +66,8 @@ class DiaAtivo:
         print("\n" + linha_separadora)
         print(f"Resumo para o dia: {self.data.strftime('%d de %B de %Y')}")
         print("-" * 60)
-        print(f"⚡ Energia restante: {self.energia_atual} / {self.ENERGIA_INICIAL}")
+        print(f"Status da Camila: {self.nivel_de_cansaco}")
+        print(f" Energia restante: {self.energia_atual} / {self.ENERGIA_INICIAL}")
         print("\n Tarefas do Dia:")
 
         if not self.tarefas:
@@ -67,11 +80,11 @@ class DiaAtivo:
                 # Verifica o tipo real da instância
                 if isinstance(tarefa, TarefaEspecial):
                     if isinstance(tarefa, TarefaRecorrente):
-                        tipo = "🔁 Recorrente"
+                        tipo = " Recorrente"
                     elif isinstance(tarefa, TarefaUrgente):
-                        tipo = "⏰ Urgente"
+                        tipo = " Urgente"
                     else:
-                        tipo = "✨ Especial"
+                        tipo = " Especial"
 
                 sinal_energia = "+" if tarefa.impacto_energia >= 0 else ""
                 status_icone = "✓" if tarefa.concluida else "○"

@@ -5,18 +5,7 @@ from meu_ritmo.domain.enums.priority_enum import PrioridadeEnum
 
 
 class Tarefa:
-    """
-    Representa uma única tarefa na agenda.
-
-    Características:
-        descricao (str): O que precisa ser feito.
-        prioridade (int): Nivel de urgencia (1-3).
-        impacto_energia (int): Quanto de energia a tarefa consome ou gera.
-        concluida (bool): Se a tarefa foi concluída.
-        data_criacao (date): Data de criação da tarefa.
-        categoria (str): Categoria da tarefa (ex: trabalho, pessoal).
-    """
-
+    """Representa uma única tarefa na agenda."""
     def __init__(
         self,
         descricao: str,
@@ -24,15 +13,17 @@ class Tarefa:
         impacto_energia: int,
         categoria: CategoriaEnum,
     ):
-        if not descricao:
-            raise ValueError("A descrição da tarefa não pode estar vazia.")
-
-        self.descricao = descricao
+        self._descricao = descricao
         self.prioridade = prioridade
         self.impacto_energia = impacto_energia
         self.concluida = False
         self.data_criacao = datetime.date.today()
         self.categoria = categoria
+
+    @property
+    def descricao(self) -> str:
+        """Property para acessar a descrição de forma segura."""
+        return self._descricao
 
     def __repr__(self) -> str:
         status_icone = "✓" if self.concluida else "○"

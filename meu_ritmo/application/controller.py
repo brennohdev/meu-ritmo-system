@@ -4,6 +4,7 @@ import time
 from meu_ritmo.domain.models.active_day import DiaAtivo
 from meu_ritmo.logic.cases.get_data_new_task import obter_dados_nova_tarefa
 from meu_ritmo.logic.cases.task_updater import concluir_tarefa_interativo
+from meu_ritmo.logic.cases.task_deleter import deletar_tarefa_interativa
 
 
 class MeuRitmoApp:
@@ -25,9 +26,17 @@ class MeuRitmoApp:
         print("1. Adicionar uma nova tarefa")
         print("2. Mostrar resumo do dia")
         print("3. Concluir uma tarefa")
-        print("4. Sair do programa")
+        print("4. Deletar uma tarefa")
+        print("5. Sair do programa")
         print("=" * 37)
 
+
+    def _processar_deletar_tarefa(self):
+        """Orquestra o processo de deletar uma tarefa."""
+        self._limpar_tela()
+        print(" Deletar Tarefa ")
+        deletar_tarefa_interativa(self.dia_atual.tarefas)
+        
     def _processar_adicionar_tarefa(self):
         self._limpar_tela()
         print("Adicionar Nova Tarefa")
@@ -70,6 +79,8 @@ class MeuRitmoApp:
             elif escolha == "3":
                 self._processar_concluir_tarefa()
             elif escolha == "4":
+                self._processar_deletar_tarefa()
+            elif escolha == "5": 
                 self._limpar_tela()
                 print("\nAté a próxima! Cuide-se.")
                 break
