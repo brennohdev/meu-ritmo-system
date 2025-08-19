@@ -21,7 +21,7 @@ class DiaAtivo:
         self.data = data
         self.tarefas: List[Tarefa] = []
         self.energia_atual = self.ENERGIA_INICIAL
-    
+
     @property
     def nivel_de_cansaco(self) -> str:
         """Calcula o status da Camila com base na energia atual."""
