@@ -1,15 +1,15 @@
+# meu_ritmo/domain/models/active_day.py
+
 import datetime
 from typing import List
-from meu_ritmo.domain.models.types_special_task import TarefaRecorrente, TarefaUrgente
 from meu_ritmo.domain.models.task import Tarefa
-from meu_ritmo.domain.models.special_task import TarefaEspecial
 
 
 class DiaAtivo:
     """
     Gerencia todas as tarefas e o nível de energia para um único dia.
 
-    Caratecterísticas:
+    Características:
         data (date): A data que este objeto representa.
         tarefas (List[Tarefa]): Uma lista de objetos Tarefa para este dia.
         energia_atual (int): O nível de energia restante para o dia.
@@ -24,48 +24,36 @@ class DiaAtivo:
     
     @property
     def nivel_de_cansaco(self) -> str:
-        """Calcula o status da Camila com base na energia atual."""
+        """Calcula o status da Camila com base na energia atual, com emojis."""
         if self.energia_atual > 70:
-            return "Disposta "
+            return "Disposta 😄"
         elif 40 < self.energia_atual <= 70:
-            return "Normal "
+            return "Normal 🙂"
         elif 20 < self.energia_atual <= 40:
-            return "Cansada "
+            return "Cansada 🥱"
         else:
-            return "Exausta "
+            return "Exausta 🥵"
 
-    def adicionar_tarefa(self, dados_tarefa):
-        # Cria o tipo de tarefa apropriado
-        if dados_tarefa["tipo_especial"] == "recorrente":
-            tarefa = TarefaRecorrente(
-                descricao=dados_tarefa["descricao"],
-                prioridade=dados_tarefa["prioridade"],
-                categoria=dados_tarefa["categoria"],
-                impacto_energia=dados_tarefa["impacto_energia"],
-            )
-        elif dados_tarefa["tipo_especial"] == "urgente":
-            tarefa = TarefaUrgente(
-                descricao=dados_tarefa["descricao"],
-                prioridade=dados_tarefa["prioridade"],
-                categoria=dados_tarefa["categoria"],
-                impacto_energia=dados_tarefa["impacto_energia"],
-            )
-        else:
-            tarefa = Tarefa(
-                descricao=dados_tarefa["descricao"],
-                prioridade=dados_tarefa["prioridade"],
-                categoria=dados_tarefa["categoria"],
-                impacto_energia=dados_tarefa["impacto_energia"],
-            )
-
+    def adicionar_tarefa(self, tarefa: Tarefa):
+        """
+        Adiciona um objeto Tarefa já criado à lista do dia e atualiza a energia.
+        A lógica de criação da tarefa foi movida para a interface, tornando este
+        método mais limpo, direto e corrigindo o erro anterior.
+        """
         self.tarefas.append(tarefa)
-        self.energia_atual += tarefa.impacto_energia
+        # Atualiza a energia com base no impacto total da tarefa,
+        # incluindo suas sub-tarefas (usando o método recursivo de Tarefa).
+        self.energia_atual += tarefa.calcular_impacto_total()
 
     def mostrar_resumo(self):
-        linha_separadora = "=" * 60
+        """
+        Exibe um resumo do dia no console. Útil para depuração ou para a
+        versão original da aplicação sem interface gráfica.
+        """
+        linha_separadora = "=" * 80
         print("\n" + linha_separadora)
         print(f"Resumo para o dia: {self.data.strftime('%d de %B de %Y')}")
-        print("-" * 60)
+        print("-" * 80)
         print(f"Status da Camila: {self.nivel_de_cansaco}")
         print(f" Energia restante: {self.energia_atual} / {self.ENERGIA_INICIAL}")
         print("\n Tarefas do Dia:")
@@ -73,27 +61,7 @@ class DiaAtivo:
         if not self.tarefas:
             print("   Nenhuma tarefa. Aproveite para relaxar! :D")
         else:
+            # Assumindo que a classe Tarefa também foi atualizada com um método __repr__
             for tarefa in sorted(self.tarefas, key=lambda t: t.prioridade.value):
-                # Determina o tipo da tarefa de forma mais robusta
-                tipo = "Normal"  # Padrão
-
-                # Verifica o tipo real da instância
-                if isinstance(tarefa, TarefaEspecial):
-                    if isinstance(tarefa, TarefaRecorrente):
-                        tipo = " Recorrente"
-                    elif isinstance(tarefa, TarefaUrgente):
-                        tipo = " Urgente"
-                    else:
-                        tipo = " Especial"
-
-                sinal_energia = "+" if tarefa.impacto_energia >= 0 else ""
-                status_icone = "✓" if tarefa.concluida else "○"
-
-                print(
-                    f"   - [{status_icone}] {tarefa.descricao.ljust(20)} | "
-                    f"Categoria: {tarefa.categoria.value.ljust(15)} | "
-                    f"Prioridade: {tarefa.prioridade.name.capitalize().ljust(6)} | "
-                    f"Energia: {sinal_energia}{str(tarefa.impacto_energia).ljust(3)} | "
-                    f"Tipo: {tipo}"
-                )
+                print(f"   {tarefa}")
         print(linha_separadora)
