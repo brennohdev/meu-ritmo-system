@@ -1,11 +1,15 @@
+# meu_ritmo/interface_streamlit.py
+
 import sys
 import os
 import pandas as pd
+# Adiciona o diretório raiz do projeto (MEU-RITMO-SYSTEM) ao path do Python
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import streamlit as st
 import datetime
 
+# As importações são ABSOLUTAS, pois agora o Python sabe onde encontrar "meu_ritmo"
 from meu_ritmo.domain.enums.category_enum import CategoriaEnum
 from meu_ritmo.domain.enums.priority_enum import PrioridadeEnum
 from meu_ritmo.domain.models.task import Tarefa
@@ -13,6 +17,7 @@ from meu_ritmo.domain.models.active_day import DiaAtivo
 from meu_ritmo.domain.models.types_special_task import TarefaRecorrente, TarefaUrgente
 from meu_ritmo.logic.cases.get_data_new_task import MAPA_ENERGIA_CATEGORIAS
 
+# --- MAPEAMENTO DE ÍCONES PARA UMA UI MAIS RICA ---
 CATEGORIA_ICONS = {
     CategoriaEnum.TRABALHO: "💻",
     CategoriaEnum.FACULDADE: "🎓",
@@ -27,6 +32,7 @@ PRIORIDADE_ICONS = {
     PrioridadeEnum.BAIXA: "🟢",
 }
 
+# --- LÓGICA DO GRAFO (BFS) ---
 def atualizar_status_tarefas(tarefas: list[Tarefa]):
     """
     Simula uma travessia no GRAFO de tarefas para definir
@@ -35,15 +41,18 @@ def atualizar_status_tarefas(tarefas: list[Tarefa]):
     for tarefa in tarefas:
         tarefa.bloqueada = tarefa.esta_bloqueada()
 
+# --- Configuração Inicial da Página ---
 st.set_page_config(
     page_title="Meu Ritmo",
     page_icon="📅",
     layout="wide"
 )
 
+# --- Gerenciamento de Estado ---
 if 'dia_ativo' not in st.session_state:
     st.session_state.dia_ativo = DiaAtivo(datetime.date.today())
 
+# --- Barra Lateral (Sidebar) ---
 with st.sidebar:
     st.header("✨ Adicionar Nova Tarefa")
     
@@ -62,11 +71,12 @@ with st.sidebar:
             format_func=lambda c: f"{CATEGORIA_ICONS[c]} {c.value}"
         )
         
-        tipo_especial_str = st.selectbox(
+        tipo_especial = st.selectbox(
             "Tipo de Tarefa", 
             ["Normal", "Recorrente", "Urgente"]
         )
         
+        # FEATURE GRAFOS: Campo para selecionar pré-requisitos
         tarefas_pendentes = [t for t in st.session_state.dia_ativo.tarefas if not t.concluida]
         prereqs_selecionados = st.multiselect(
             "Esta tarefa depende de (pré-requisitos):",
@@ -80,28 +90,22 @@ with st.sidebar:
             if not descricao.strip():
                 st.warning("A descrição não pode estar em branco.")
             else:
-                tarefa_args = {
-                    "descricao": descricao,
-                    "prioridade": prioridade,
-                    "categoria": categoria,
-                    "impacto_energia": MAPA_ENERGIA_CATEGORIAS[categoria],
-                }
-                
-                tipo_lower = tipo_especial_str.lower()
-                if tipo_lower == "recorrente":
-                    nova_tarefa = TarefaRecorrente(**tarefa_args)
-                elif tipo_lower == "urgente":
-                    nova_tarefa = TarefaUrgente(**tarefa_args)
-                else:
-                    nova_tarefa = Tarefa(**tarefa_args)
-
+                # Lógica para criar tarefa com dependências
+                nova_tarefa = Tarefa(
+                    descricao=descricao,
+                    prioridade=prioridade,
+                    categoria=categoria,
+                    impacto_energia=MAPA_ENERGIA_CATEGORIAS[categoria],
+                )
                 nova_tarefa.prerequisitos = prereqs_selecionados
                 st.session_state.dia_ativo.adicionar_tarefa(nova_tarefa)
                 st.success(f"Tarefa '{descricao}' adicionada!")
 
+# --- Painel Principal ---
 st.title("Meu Ritmo 📅")
 st.markdown("Seu gerenciador de tarefas e energia diária.")
 
+# --- Exibição do Resumo do Dia ---
 with st.container(border=True):
     data_hoje = st.session_state.dia_ativo.data.strftime('%d de %B de %Y')
     st.subheader(f"Resumo para {data_hoje}")
@@ -112,6 +116,7 @@ with st.container(border=True):
         energia_atual = st.session_state.dia_ativo.energia_atual
         energia_inicial = st.session_state.dia_ativo.ENERGIA_INICIAL
         energia_percentual = energia_atual / energia_inicial if energia_inicial > 0 else 0
+        # AQUI ESTÁ A CORREÇÃO:
         st.progress(min(1.0, max(0, energia_percentual)))
     
     with col2:
@@ -122,6 +127,7 @@ with st.container(border=True):
 
 st.markdown("---")
 
+# --- Lista de Tarefas ---
 st.header("Tarefas do Dia")
 
 if not st.session_state.dia_ativo.tarefas:
@@ -132,6 +138,7 @@ else:
         key=lambda t: t.prioridade.value
     )
     
+    # FEATURE GRAFOS: Atualiza o status antes de exibir
     atualizar_status_tarefas(tarefas_ordenadas)
     
     for i, tarefa in enumerate(tarefas_ordenadas):
@@ -171,11 +178,12 @@ else:
                         st.rerun()
                 
                 if st.button("Excluir", key=f"excluir_{i}", use_container_width=True):
-                    st.session_state.dia_ativo.energia_atual -= tarefa.calcular_impacto_total()
+                    st.session_state.dia_ativo.energia_atual -= tarefa.calcular_impacto_total() # Usa recursão para remover energia
                     st.session_state.dia_ativo.tarefas.remove(tarefa)
                     st.toast(f"Tarefa '{tarefa.descricao}' removida.", icon="🗑️")
                     st.rerun()
             
+            # --- FEATURES RECURSÃO E SUB-TAREFAS ---
             if tarefa.sub_tarefas:
                 st.markdown("---")
                 for sub in tarefa.sub_tarefas:
@@ -199,9 +207,9 @@ else:
                                     prioridade=tarefa.prioridade, categoria=tarefa.categoria
                                 )
                                 tarefa.sub_tarefas.append(nova_sub)
-                                st.session_state.dia_ativo.energia_atual += nova_sub.impacto_energia
                                 st.rerun()
 
+# --- FEATURE TABELA HASH ---
 st.markdown("---")
 st.header("📊 Estatísticas do Dia")
 
@@ -209,11 +217,13 @@ with st.expander("Ver resumo por categoria"):
     if not st.session_state.dia_ativo.tarefas:
         st.write("Nenhuma tarefa para analisar.")
     else:
+        # 1. Inicializa e preenche a Tabela Hash (dicionário)
         contagem_categorias = {}
         for tarefa in st.session_state.dia_ativo.tarefas:
             categoria = tarefa.categoria.value
             contagem_categorias[categoria] = contagem_categorias.get(categoria, 0) + 1
         
+        # 2. Exibe os dados da Tabela Hash em um gráfico
         df_categorias = pd.DataFrame(
             list(contagem_categorias.items()),
             columns=['Categoria', 'Quantidade']
