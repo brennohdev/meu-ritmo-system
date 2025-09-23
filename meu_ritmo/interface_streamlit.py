@@ -71,7 +71,7 @@ with st.sidebar:
             format_func=lambda c: f"{CATEGORIA_ICONS[c]} {c.value}"
         )
         
-        tipo_especial = st.selectbox(
+        tipo_especial_str = st.selectbox(
             "Tipo de Tarefa", 
             ["Normal", "Recorrente", "Urgente"]
         )
@@ -90,16 +90,25 @@ with st.sidebar:
             if not descricao.strip():
                 st.warning("A descrição não pode estar em branco.")
             else:
-                # Lógica para criar tarefa com dependências
-                nova_tarefa = Tarefa(
-                    descricao=descricao,
-                    prioridade=prioridade,
-                    categoria=categoria,
-                    impacto_energia=MAPA_ENERGIA_CATEGORIAS[categoria],
-                )
+                tarefa_args = {
+                    "descricao": descricao,
+                    "prioridade": prioridade,
+                    "categoria": categoria,
+                    "impacto_energia": MAPA_ENERGIA_CATEGORIAS[categoria],
+                }
+                
+                tipo_lower = tipo_especial_str.lower()
+                if tipo_lower == "recorrente":
+                    nova_tarefa = TarefaRecorrente(**tarefa_args)
+                elif tipo_lower == "urgente":
+                    nova_tarefa = TarefaUrgente(**tarefa_args)
+                else:
+                    nova_tarefa = Tarefa(**tarefa_args)
+
                 nova_tarefa.prerequisitos = prereqs_selecionados
                 st.session_state.dia_ativo.adicionar_tarefa(nova_tarefa)
                 st.success(f"Tarefa '{descricao}' adicionada!")
+                st.rerun()
 
 # --- Painel Principal ---
 st.title("Meu Ritmo 📅")
@@ -116,7 +125,6 @@ with st.container(border=True):
         energia_atual = st.session_state.dia_ativo.energia_atual
         energia_inicial = st.session_state.dia_ativo.ENERGIA_INICIAL
         energia_percentual = energia_atual / energia_inicial if energia_inicial > 0 else 0
-        # AQUI ESTÁ A CORREÇÃO:
         st.progress(min(1.0, max(0, energia_percentual)))
     
     with col2:
@@ -138,7 +146,6 @@ else:
         key=lambda t: t.prioridade.value
     )
     
-    # FEATURE GRAFOS: Atualiza o status antes de exibir
     atualizar_status_tarefas(tarefas_ordenadas)
     
     for i, tarefa in enumerate(tarefas_ordenadas):
@@ -178,12 +185,11 @@ else:
                         st.rerun()
                 
                 if st.button("Excluir", key=f"excluir_{i}", use_container_width=True):
-                    st.session_state.dia_ativo.energia_atual -= tarefa.calcular_impacto_total() # Usa recursão para remover energia
+                    st.session_state.dia_ativo.energia_atual -= tarefa.calcular_impacto_total()
                     st.session_state.dia_ativo.tarefas.remove(tarefa)
                     st.toast(f"Tarefa '{tarefa.descricao}' removida.", icon="🗑️")
                     st.rerun()
             
-            # --- FEATURES RECURSÃO E SUB-TAREFAS ---
             if tarefa.sub_tarefas:
                 st.markdown("---")
                 for sub in tarefa.sub_tarefas:
@@ -207,6 +213,7 @@ else:
                                     prioridade=tarefa.prioridade, categoria=tarefa.categoria
                                 )
                                 tarefa.sub_tarefas.append(nova_sub)
+                                st.session_state.dia_ativo.energia_atual += nova_sub.impacto_energia
                                 st.rerun()
 
 # --- FEATURE TABELA HASH ---
@@ -217,13 +224,11 @@ with st.expander("Ver resumo por categoria"):
     if not st.session_state.dia_ativo.tarefas:
         st.write("Nenhuma tarefa para analisar.")
     else:
-        # 1. Inicializa e preenche a Tabela Hash (dicionário)
         contagem_categorias = {}
         for tarefa in st.session_state.dia_ativo.tarefas:
             categoria = tarefa.categoria.value
             contagem_categorias[categoria] = contagem_categorias.get(categoria, 0) + 1
         
-        # 2. Exibe os dados da Tabela Hash em um gráfico
         df_categorias = pd.DataFrame(
             list(contagem_categorias.items()),
             columns=['Categoria', 'Quantidade']
