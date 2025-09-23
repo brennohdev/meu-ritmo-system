@@ -1,5 +1,3 @@
-# meu_ritmo/domain/models/task.py
-
 import datetime
 from typing import List
 from meu_ritmo.domain.enums.category_enum import CategoriaEnum
@@ -22,10 +20,9 @@ class Tarefa:
         self.data_criacao = datetime.date.today()
         self.categoria = categoria
         
-        # --- NOVOS ATRIBUTOS PARA AS FEATURES ---
-        self.sub_tarefas: List['Tarefa'] = []      # Para a feature de Recursão
-        self.prerequisitos: List['Tarefa'] = []   # Para a feature de Grafo/Dependências
-        self.bloqueada = False                    # Atributo auxiliar para a UI
+        self.sub_tarefas: List['Tarefa'] = []    
+        self.prerequisitos: List['Tarefa'] = []   
+        self.bloqueada = False                    
 
     @property
     def descricao(self) -> str:
@@ -41,8 +38,6 @@ class Tarefa:
     def marcar_como_concluida(self):
         self.concluida = True
         print(f"Tarefa '{self.descricao}' marcada como concluída")
-
-    # --- NOVOS MÉTODOS PARA AS FEATURES ---
 
     def calcular_impacto_total(self) -> int:
         """

@@ -1,15 +1,11 @@
-# meu_ritmo/interface_streamlit.py
-
 import sys
 import os
 import pandas as pd
-# Adiciona o diretório raiz do projeto (MEU-RITMO-SYSTEM) ao path do Python
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import streamlit as st
 import datetime
 
-# As importações são ABSOLUTAS, pois agora o Python sabe onde encontrar "meU_ritmo"
 from meu_ritmo.domain.enums.category_enum import CategoriaEnum
 from meu_ritmo.domain.enums.priority_enum import PrioridadeEnum
 from meu_ritmo.domain.models.task import Tarefa
@@ -17,7 +13,6 @@ from meu_ritmo.domain.models.active_day import DiaAtivo
 from meu_ritmo.domain.models.types_special_task import TarefaRecorrente, TarefaUrgente
 from meu_ritmo.logic.cases.get_data_new_task import MAPA_ENERGIA_CATEGORIAS
 
-# --- MAPEAMENTO DE ÍCONES PARA UMA UI MAIS RICA ---
 CATEGORIA_ICONS = {
     CategoriaEnum.TRABALHO: "💻",
     CategoriaEnum.FACULDADE: "🎓",
@@ -32,7 +27,6 @@ PRIORIDADE_ICONS = {
     PrioridadeEnum.BAIXA: "🟢",
 }
 
-# --- LÓGICA DO GRAFO (BFS) ---
 def atualizar_status_tarefas(tarefas: list[Tarefa]):
     """
     Simula uma travessia no GRAFO de tarefas para definir
@@ -41,18 +35,15 @@ def atualizar_status_tarefas(tarefas: list[Tarefa]):
     for tarefa in tarefas:
         tarefa.bloqueada = tarefa.esta_bloqueada()
 
-# --- Configuração Inicial da Página ---
 st.set_page_config(
     page_title="Meu Ritmo",
     page_icon="📅",
     layout="wide"
 )
 
-# --- Gerenciamento de Estado ---
 if 'dia_ativo' not in st.session_state:
     st.session_state.dia_ativo = DiaAtivo(datetime.date.today())
 
-# --- Barra Lateral (Sidebar) ---
 with st.sidebar:
     st.header("✨ Adicionar Nova Tarefa")
     
@@ -76,7 +67,6 @@ with st.sidebar:
             ["Normal", "Recorrente", "Urgente"]
         )
         
-        # FEATURE GRAFOS: Campo para selecionar pré-requisitos
         tarefas_pendentes = [t for t in st.session_state.dia_ativo.tarefas if not t.concluida]
         prereqs_selecionados = st.multiselect(
             "Esta tarefa depende de (pré-requisitos):",
@@ -109,11 +99,9 @@ with st.sidebar:
                 st.session_state.dia_ativo.adicionar_tarefa(nova_tarefa)
                 st.success(f"Tarefa '{descricao}' adicionada!")
 
-# --- Painel Principal ---
 st.title("Meu Ritmo 📅")
 st.markdown("Seu gerenciador de tarefas e energia diária.")
 
-# --- Exibição do Resumo do Dia ---
 with st.container(border=True):
     data_hoje = st.session_state.dia_ativo.data.strftime('%d de %B de %Y')
     st.subheader(f"Resumo para {data_hoje}")
@@ -134,7 +122,6 @@ with st.container(border=True):
 
 st.markdown("---")
 
-# --- Lista de Tarefas ---
 st.header("Tarefas do Dia")
 
 if not st.session_state.dia_ativo.tarefas:
@@ -215,7 +202,6 @@ else:
                                 st.session_state.dia_ativo.energia_atual += nova_sub.impacto_energia
                                 st.rerun()
 
-# --- FEATURE TABELA HASH ---
 st.markdown("---")
 st.header("📊 Estatísticas do Dia")
 

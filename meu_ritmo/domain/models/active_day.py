@@ -1,5 +1,3 @@
-# meu_ritmo/domain/models/active_day.py
-
 import datetime
 from typing import List
 from meu_ritmo.domain.models.task import Tarefa
@@ -41,8 +39,6 @@ class DiaAtivo:
         método mais limpo, direto e corrigindo o erro anterior.
         """
         self.tarefas.append(tarefa)
-        # Atualiza a energia com base no impacto total da tarefa,
-        # incluindo suas sub-tarefas (usando o método recursivo de Tarefa).
         self.energia_atual += tarefa.calcular_impacto_total()
 
     def mostrar_resumo(self):
@@ -61,7 +57,6 @@ class DiaAtivo:
         if not self.tarefas:
             print("   Nenhuma tarefa. Aproveite para relaxar! :D")
         else:
-            # Assumindo que a classe Tarefa também foi atualizada com um método __repr__
             for tarefa in sorted(self.tarefas, key=lambda t: t.prioridade.value):
                 print(f"   {tarefa}")
         print(linha_separadora)

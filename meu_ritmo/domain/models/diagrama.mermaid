@@ -1,0 +1,71 @@
+```mermaid
+classDiagram
+    direction LR
+
+    class DiaAtivo {
+        +date data
+        +List~Tarefa~ tarefas
+        +int energia_atual
+        +ENERGIA_INICIAL: int
+        +adicionar_tarefa(Tarefa)
+        +mostrar_resumo()
+    }
+
+    class Tarefa {
+        -String _descricao
+        +PrioridadeEnum prioridade
+        +int impacto_energia
+        +bool concluida
+        +List~Tarefa~ sub_tarefas
+        +List~Tarefa~ prerequisitos
+        +marcar_como_concluida()
+        +calcular_impacto_total() int
+        +esta_bloqueada() bool
+    }
+
+    class TarefaEspecial {
+        <<Abstract>>
+        #String efeito_especial
+        #date data_limite
+        #_calcular_data_limite()* date
+        #aplicar_efeito_especial()* str
+    }
+
+    class TarefaRecorrente {
+        +aplicar_efeito_especial() str
+    }
+
+    class TarefaUrgente {
+        +marcar_como_concluida()
+        +aplicar_efeito_especial() str
+    }
+
+    class PrioridadeEnum {
+        <<Enumeration>>
+        ALTA
+        MEDIA
+        BAIXA
+    }
+
+    class CategoriaEnum {
+        <<Enumeration>>
+        TRABALHO
+        ESTUDO
+        LAZER
+        SAUDE
+    }
+
+    %% Relacionamentos
+    DiaAtivo "1" o-- "0..*" Tarefa : gerencia
+    Tarefa <|-- TarefaEspecial
+    TarefaEspecial <|-- TarefaRecorrente
+    TarefaEspecial <|-- TarefaUrgente
+
+    %% Relacionamentos Recursivos em Tarefa
+    Tarefa "1" o-- "0..*" Tarefa : contém (sub_tarefas)
+    Tarefa "*" -- "*" Tarefa : depende de (prerequisitos)
+
+    %% Dependências com Enums
+    Tarefa ..> PrioridadeEnum : usa
+    Tarefa ..> CategoriaEnum : usa
+```
